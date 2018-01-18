@@ -10,21 +10,21 @@ import UIKit
 
 class ViewController: UIViewController {
 
-    @IBOutlet var cardButtons: [UIButton]!
-    @IBOutlet weak var scoreLabel: UILabel!
+    @IBOutlet private var cardButtons: [UIButton]!
+    @IBOutlet private weak var scoreLabel: UILabel!
     
-    lazy var memoryGame = MemoryGame(numberOfCardPairs: (cardButtons.count + 1) / 2)
-    var randomThemeIndex = 0;
+    private lazy var memoryGame = MemoryGame(numberOfCardPairs: (cardButtons.count + 1) / 2)
+    private var randomThemeIndex = 0;
     
-    @IBAction func flipCard(_ sender: UIButton) {
+    @IBAction private func flipCard(_ sender: UIButton) {
         if let cardNumber = cardButtons.index(of: sender) {
             memoryGame.chooseCard(at: cardNumber)
             updateViewFromModel()
-            updateScore()
+            updateScoreLabel()
         }
     }
     
-    func updateScore() {
+    private func updateScoreLabel() {
         scoreLabel.text = "Score: \(memoryGame.score)"
     }
     
@@ -32,20 +32,20 @@ class ViewController: UIViewController {
         newGame()
     }
     
-    @IBAction func newGame() {
+    @IBAction private func newGame() {
         memoryGame.newGame()
         updateViewFromModel()
-        emoji = [Int:String]()
-        randomThemeIndex = Int(arc4random_uniform(UInt32(emojiThemes.count)))
+        emoji = [Card:String]()
+        randomThemeIndex = emojiThemes.count.arc4random
         if let theme = emojiThemes[randomThemeIndex] {
             currentEmojiTheme = theme
         } else {
             currentEmojiTheme = [String]()
         }
-        updateScore()
+        updateScoreLabel()
     }
     
-    func updateViewFromModel() {
+    private func updateViewFromModel() {
         for index in cardButtons.indices {
             let button = cardButtons[index]
             let card = memoryGame.cards[index]
@@ -59,27 +59,29 @@ class ViewController: UIViewController {
         }
     }
     
-    var emojiThemes = [0: ["⚽️", "🏀", "🏈", "⚾️", "🎾", "🏐", "🏉", "🎱", "🏓", "🏸", "🏒", "🏏"],
-                       1: ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🍈", "🍒", "🍑"],
-                       2: ["😍", "😂", "😜", "😎", "😇", "😤", "🤩", "😡", "🙄", "😈", "👹", "🤡"],
-                       3: ["👌🏻", "👏🏽", "💪🏻", "👋🏼", "✊🏿", "👇", "🤟🏻", "👎🏾", "🤜🏻", "🙏", "👌🏻", "☝🏾"],
-                       4: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚒", "🚐", "🚚", "🚜"],
-                       5: ["🇦🇽", "🇦🇹", "🇧🇹", "🇮🇴", "🇧🇧", "🇨🇦", "🇯🇵", "🇵🇷", "🇧🇱", "🇱🇨", "🇵🇳", "🇭🇺"],
-                       6: ["♚", "♛", "♜", "♝", "♞", "♟", "♠︎", "♣︎", "♥︎", "♦︎", "⚅", "★", "⚂", "⚧"]]
+    private var emojiThemes =
+        [0: ["⚽️", "🏀", "🏈", "⚾️", "🎾", "🏐", "🏉", "🎱", "🏓", "🏸", "🏒", "🏏"],
+         1: ["🍏", "🍎", "🍐", "🍊", "🍋", "🍌", "🍉", "🍇", "🍓", "🍈", "🍒", "🍑"],
+         2: ["😍", "😂", "😜", "😎", "😇", "😤", "🤩", "😡", "🙄", "😈", "👹", "🤡"],
+         3: ["👌🏻", "👏🏽", "💪🏻", "👋🏼", "✊🏿", "👇", "🤟🏻", "👎🏾", "🤜🏻", "🙏", "👌🏻", "☝🏾"],
+         4: ["🚗", "🚕", "🚙", "🚌", "🚎", "🏎", "🚓", "🚑", "🚒", "🚐", "🚚", "🚜"],
+         5: ["🇦🇽", "🇦🇹", "🇧🇹", "🇮🇴", "🇧🇧", "🇨🇦", "🇯🇵", "🇵🇷", "🇧🇱", "🇱🇨", "🇵🇳", "🇭🇺"],
+         6: ["♚", "♛", "♜", "♝", "♞", "♟", "♠︎", "♣︎", "♥︎", "♦︎", "⚅", "★", "⚂", "⚧"]]
     
-    var currentEmojiTheme = [String]()
+    private var currentEmojiTheme = [String]()
     
-    var emoji = [Int:String]()
+    private var emoji = [Card:String]()
     
-    func emoji(for card: Card) -> String {
-        if emoji[card.identifier] == nil, currentEmojiTheme.count > 0 {
-            let randomIndex = Int(arc4random_uniform(UInt32(currentEmojiTheme.count)))
-            emoji[card.identifier] = currentEmojiTheme.remove(at: randomIndex)
+    private func emoji(for card: Card) -> String {
+        if emoji[card] == nil, currentEmojiTheme.count > 0 {
+            emoji[card] = currentEmojiTheme.remove(at: currentEmojiTheme.count.arc4random)
         }
-        if let selectedEmoji = emoji[card.identifier] {
+        if let selectedEmoji = emoji[card] {
             return selectedEmoji
         }
         return "?"
     }
 }
+
+
 

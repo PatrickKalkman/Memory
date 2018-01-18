@@ -9,13 +9,25 @@
 import Foundation
 
 class MemoryGame {
-    var cards = [Card]()
     
-    var indexOfOneAndOnlyFaceUpCard: Int?
+    private(set) var cards = [Card]()
     
     var score = 0
     
+    private var indexOfOneAndOnlyFaceUpCard: Int? {
+        get {
+            let faceUpIndices = cards.indices.filter { cards[$0].isFaceUp }
+            return faceUpIndices.count == 1 ? faceUpIndices.first : nil
+        }
+        set {
+            for index in cards.indices {
+                cards[index].isFaceUp = (index == newValue)
+            }
+        }
+    }
+    
     init(numberOfCardPairs: Int) {
+        assert(numberOfCardPairs > 0, "init(numberOfCardPairs: \(numberOfCardPairs)): must be greater than zero")
         for _ in 1...numberOfCardPairs {
             let card = Card()
             cards.append(card)
@@ -25,7 +37,7 @@ class MemoryGame {
         shuffleCards()
     }
     
-    func shuffleCards() {
+    private func shuffleCards() {
         for _ in cards.indices {
             let cardIndex1 = getRandomCardIndex()
             let cardIndex2 = getRandomCardIndex()
@@ -33,21 +45,22 @@ class MemoryGame {
         }
     }
     
-    func swapCards(first cardIndex1: Int, with cardIndex2: Int) {
+    private func swapCards(first cardIndex1: Int, with cardIndex2: Int) {
         let temporaryCard = cards[cardIndex1]
         cards[cardIndex1] = cards[cardIndex2]
         cards[cardIndex2] = temporaryCard
     }
     
-    func getRandomCardIndex() -> Int {
-        return Int(arc4random_uniform(UInt32(cards.count)))
+    private func getRandomCardIndex() -> Int {
+        return cards.count.arc4random
     }
     
     func chooseCard(at index: Int) {
+        assert(cards.indices.contains(index), "MemoryGame.chooseCard(at: \(index)): chosen index not valid in the cards")
         if (!cards[index].isMatch) {
             if let matchIndex = indexOfOneAndOnlyFaceUpCard, matchIndex != index {
                 // check if cards match
-                if cards[matchIndex].identifier == cards[index].identifier {
+                if cards[matchIndex] == cards[index] {
                     cards[matchIndex].isMatch = true
                     cards[index].isMatch = true
                     score += 2
@@ -65,13 +78,8 @@ class MemoryGame {
                     }
                 }
                 cards[index].isFaceUp = true
-                indexOfOneAndOnlyFaceUpCard = nil
             } else {
                 //either no cards or 2 cards are face up
-                for flipDownIndex in cards.indices {
-                    cards[flipDownIndex].isFaceUp = false
-                }
-                cards[index].isFaceUp = true
                 indexOfOneAndOnlyFaceUpCard = index
             }
         }
@@ -89,16 +97,23 @@ class MemoryGame {
     }
 }
 
-struct Card {
+struct Card: Hashable {
+    var hashValue: Int {
+        return identifier
+    }
+    
+    static func ==(lhs: Card, rhs: Card) -> Bool {
+        return lhs.identifier == rhs.identifier
+    }
     
     var isFaceUp = false
     var isMatch = false
     var isSeen = false
-    var identifier: Int
+    private var identifier: Int
     
-    static var currentIdentifier: Int = 0
+    private static var currentIdentifier: Int = 0
     
-    static func generateIdentifier() -> Int {
+    private static func generateIdentifier() -> Int {
         currentIdentifier += 1
         return currentIdentifier;
     }

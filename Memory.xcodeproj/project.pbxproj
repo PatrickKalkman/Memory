@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB1BFA322010C2D000C56794 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1BFA312010C2CF00C56794 /* Extensions.swift */; };
 		AB381496200D32250048D92F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB381495200D32250048D92F /* AppDelegate.swift */; };
 		AB381498200D32250048D92F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB381497200D32250048D92F /* ViewController.swift */; };
 		AB38149B200D32250048D92F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AB381499200D32250048D92F /* Main.storyboard */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AB1BFA312010C2CF00C56794 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		AB381492200D32250048D92F /* Memory.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Memory.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AB381495200D32250048D92F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AB381497200D32250048D92F /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				AB38149E200D32250048D92F /* LaunchScreen.storyboard */,
 				AB3814A1200D32250048D92F /* Info.plist */,
 				AB3814A7200D3C000048D92F /* MemoryGame.swift */,
+				AB1BFA312010C2CF00C56794 /* Extensions.swift */,
 			);
 			path = Memory;
 			sourceTree = "<group>";
@@ -142,6 +145,7 @@
 				AB3814A8200D3C000048D92F /* MemoryGame.swift in Sources */,
 				AB381498200D32250048D92F /* ViewController.swift in Sources */,
 				AB381496200D32250048D92F /* AppDelegate.swift in Sources */,
+				AB1BFA322010C2D000C56794 /* Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
